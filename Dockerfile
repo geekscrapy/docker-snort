@@ -1,13 +1,13 @@
 FROM ubuntu:16.04
 
 ## Env
-ENV DAQ_VER daq-2.0.6
+ARG DAQ_VER=daq-2.0.6
 
 ## PulledPork Env
-ENV PPORK_VERSION 0.7.3
+ARG PPORK_VERSION=0.7.3
 
 ## Snort Env
-ENV SNORT_VER 2.9.11.1
+ARG SNORT_VER=2.9.11.1
 
 
 ## Install Dependencies
@@ -90,7 +90,7 @@ RUN cd /tmp \
     && cpan Mozilla::CA IO::Socket::SSL
 
 RUN rm -rf /tmp/*
-    
+
 ## Snort
 RUN cd /etc/snort \
     && chown -R snort:snort * \
@@ -121,18 +121,21 @@ RUN pip install websnort
 ## Edits should be conducted here to limit modification to the upper layers
 
 
-ENV SNORT_HOME_NET "192.168.0.0/16,172.16.0.0/12,10.0.0.0/8"
-ENV PPORK_OINKCODE ""
+ARG SNORT_HOME_NET="192.168.0.0/16,172.16.0.0/12,10.0.0.0/8"
+ARG PPORK_OINKCODE
+RUN test -n "$PPORK_OINKCODE" ########## Mandatory!!!:  --build-arg PPORK_OINKCODE=<your-oink-code-from-snort.org>
+
+ARG UPDATE_RULES
 
 ## Add Oinkcode to pulledpork conf
 COPY pulledpork.conf /etc/snort/pulledpork.conf
-
 RUN sed -i 's/<PPORK_OINKCODE>/'"$PPORK_OINKCODE"'/g' /etc/snort/pulledpork.conf
 RUN sed -i -e 's|<'PPORK_VERSION'>|'$PPORK_VERSION'|g' /etc/snort/pulledpork.conf
 
+# COPY local rules across
 COPY local.rules /etc/snort/rules/local.rules
-COPY black_list.rules /etc/snort/rules/iplists/black_list.rules
-COPY white_list.rules /etc/snort/rules/iplists/white_list.rules
+COPY ip_black_list.rules /etc/snort/rules/iplists/black_list.rules
+COPY ip_white_list.rules /etc/snort/rules/iplists/white_list.rules
 
 ## Rule management
 ## Enable all rules!!
