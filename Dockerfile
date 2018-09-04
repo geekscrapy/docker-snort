@@ -114,7 +114,11 @@ RUN cd /etc/snort \
 ## Install websnort
 RUN pip install websnort
 
-
+# Need to generate these for the first run of PulledPork
+RUN touch /etc/snort/rules/local.rules
+RUN mkdir -p /etc/snort/rules/iplists/
+RUN touch /etc/snort/rules/iplists/black_list.rules
+RUN touch /etc/snort/rules/iplists/white_list.rules
 
 
 ###########################################################################
@@ -125,17 +129,10 @@ ARG SNORT_HOME_NET="192.168.0.0/16,172.16.0.0/12,10.0.0.0/8"
 ARG PPORK_OINKCODE
 RUN test -n "$PPORK_OINKCODE" ########## Mandatory!!!:  --build-arg PPORK_OINKCODE=<your-oink-code-from-snort.org>
 
-ARG UPDATE_RULES
-
 ## Add Oinkcode to pulledpork conf
 COPY pulledpork.conf /etc/snort/pulledpork.conf
 RUN sed -i 's/<PPORK_OINKCODE>/'"$PPORK_OINKCODE"'/g' /etc/snort/pulledpork.conf
 RUN sed -i -e 's|<'PPORK_VERSION'>|'$PPORK_VERSION'|g' /etc/snort/pulledpork.conf
-
-# COPY local rules across
-COPY local.rules /etc/snort/rules/local.rules
-COPY ip_black_list.rules /etc/snort/rules/iplists/black_list.rules
-COPY ip_white_list.rules /etc/snort/rules/iplists/white_list.rules
 
 ## Rule management
 ## Enable all rules!!
@@ -145,12 +142,11 @@ COPY ip_white_list.rules /etc/snort/rules/iplists/white_list.rules
 ## RUN echo 'preprocessor' >> /etc/snort/disablesid.conf
 
 ## Allow lots of flow bits
-RUN sed -i 's/#config flowbits_size: 64/config flowbits_size: 2048/' /etc/snort/snort.conf
+RUN sed -i 's/^.*config flowbits_size: 64$/config flowbits_size: 2048/' /etc/snort/snort.conf
 ## Run snort with rule profiling
 RUN sed -i 's/#config profile_rules: print all, sort avg_ticks/config profile_rules: print 100, sort avg_ticks_per_nomatch/' /etc/snort/snort.conf
 ## Disable sensitive data pre proc + rules
 RUN sed -i '/preprocessor sensitive_data/s/^/#/' /etc/snort/snort.conf
-RUN echo 'sensitive-data' >> /etc/snort/disablesid.conf
 ## Enable portscan detection
 RUN sed -i 's/# preprocessor sfportscan/preprocessor sfportscan/' /etc/snort/snort.conf
 ## Set HOME_NET
@@ -160,12 +156,18 @@ RUN sed -i 's#^ipvar HOME_NET any.*#ipvar HOME_NET '"$SNORT_HOME_NET"'#' /etc/sn
 ###########################################################################
 
 
+ARG DOWNLOAD_RULES="nope"
+RUN if [ $DOWNLOAD_RULES != "nope" ]; then /usr/sbin/pulledpork.pl -c /etc/snort/pulledpork.conf -v -E ; fi
 
+# COPY local rules across and re-run pulledpork
+COPY local.rules /etc/snort/rules/local.rules
+COPY ip_black_list.rules /etc/snort/rules/iplists/black_list.rules
+COPY ip_white_list.rules /etc/snort/rules/iplists/white_list.rules
+COPY disablesid.conf /etc/snort/disablesid.conf
+RUN /usr/sbin/pulledpork.pl -c /etc/snort/pulledpork.conf -v -nP
 
-## Pull down the Oink rules
-RUN /usr/sbin/pulledpork.pl -c /etc/snort/pulledpork.conf -v
-## Test Snort
-# RUN snort -r /tmp/test.pcap -c /etc/snort/snort.conf -A console -l /tmp
+# Does Snort still work?
+RUN snort -c /etc/snort/snort.conf -T
 
 EXPOSE 8080
 CMD ["websnort"]
