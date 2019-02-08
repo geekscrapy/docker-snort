@@ -4,7 +4,7 @@ Includes Snort + PulledPork + WebSnort (exposes port 8080)
 
 To use:
 
-## 0. Oink code required from: https://www.snort.org/oinkcodes
+*NB* Oink code required from: https://www.snort.org/oinkcodes
 
 ## 1. Build with:
  
