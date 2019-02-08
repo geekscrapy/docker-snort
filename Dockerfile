@@ -124,14 +124,12 @@ RUN touch /etc/snort/rules/iplists/white_list.rules
 ###########################################################################
 ## Edits should be conducted here to limit modification to the upper layers
 
-
 ARG SNORT_HOME_NET="192.168.0.0/16,172.16.0.0/12,10.0.0.0/8"
 ARG PPORK_OINKCODE
-RUN test -n "$PPORK_OINKCODE" ########## Mandatory!!!:  --build-arg PPORK_OINKCODE=<your-oink-code-from-snort.org>
+RUN if [ -z "$PPORK_OINKCODE" ]; then echo "No Oink code defined! Use: --build-arg PPORK_OINKCODE=<your-oink-code-from-snort.org> when building"; exit 1; fi
 
-## Add Oinkcode to pulledpork conf
+## copy pulled pork conf
 COPY pulledpork.conf /etc/snort/pulledpork.conf
-RUN sed -i 's/<PPORK_OINKCODE>/'"$PPORK_OINKCODE"'/g' /etc/snort/pulledpork.conf
 RUN sed -i -e 's|<'PPORK_VERSION'>|'$PPORK_VERSION'|g' /etc/snort/pulledpork.conf
 
 ## Rule management
@@ -152,22 +150,17 @@ RUN sed -i 's/# preprocessor sfportscan/preprocessor sfportscan/' /etc/snort/sno
 ## Set HOME_NET
 RUN sed -i 's#^ipvar HOME_NET any.*#ipvar HOME_NET '"$SNORT_HOME_NET"'#' /etc/snort/snort.conf
 
-
 ###########################################################################
-
-
-ARG DOWNLOAD_RULES="nope"
-RUN if [ $DOWNLOAD_RULES != "nope" ]; then /usr/sbin/pulledpork.pl -c /etc/snort/pulledpork.conf -v -E ; fi
 
 # COPY local rules across and re-run pulledpork
 COPY local.rules /etc/snort/rules/local.rules
 COPY ip_black_list.rules /etc/snort/rules/iplists/black_list.rules
 COPY ip_white_list.rules /etc/snort/rules/iplists/white_list.rules
 COPY disablesid.conf /etc/snort/disablesid.conf
-RUN /usr/sbin/pulledpork.pl -c /etc/snort/pulledpork.conf -v -nP
 
-# Does Snort still work?
-RUN snort -c /etc/snort/snort.conf -T
+# Add the script that allows the rules to be updated when the container is running
+COPY update-rules.sh update-rules.sh
+RUN bash update-rules.sh "$PPORK_OINKCODE"
 
 EXPOSE 8080
 CMD ["websnort"]
