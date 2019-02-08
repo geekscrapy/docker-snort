@@ -2,14 +2,14 @@
  
 Includes Snort + PulledPork + WebSnort (exposes port 8080)
 
-The project is to assit in initial stage triage of a potentially malicious pcap. It runs all the rules it can against a pcap attempting to highlight sessions of interest
+The project is to assit in initial stage triage of a potentially malicious pcap. It runs all the rules it can against a pcap attempting to highlight sessions of interest.
+
+*Processing of the PCAP does take a while due to the number of rules being utilised!*
 
 Thanks to:
 - Cisco / Sourcefire / Snort team for Snort
 - PulledPork project: https://github.com/shirkdog/pulledpork
 - WebSnort project for the Snort frontend: https://github.com/shendo/websnort
-
-*Processing of the PCAP does take a while due to the number of rules being utilised!*
 
 To use:
 
