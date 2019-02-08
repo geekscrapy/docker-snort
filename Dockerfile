@@ -160,7 +160,7 @@ COPY disablesid.conf /etc/snort/disablesid.conf
 # Add the script that allows the rules to be updated when the container is running
 COPY *.sh ./
 ARG PPORK_OINKCODE
-RUN bash update-rules.sh "$PPORK_OINKCODE"
+RUN if [ ! -z $PPORK_OINKCODE ]; then  bash update-rules.sh "$PPORK_OINKCODE"; fi
 
 EXPOSE 8080
 CMD ["websnort"]

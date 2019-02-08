@@ -11,34 +11,35 @@ Thanks to:
 - PulledPork project: https://github.com/shirkdog/pulledpork
 - WebSnort project for the Snort frontend: https://github.com/shendo/websnort
 
-To use:
+## To use:
 
-*NB* Oink code required from: https://www.snort.org/oinkcodes
+*NB* Oink code required if not using customintel.sh script. Can be obtained from: https://www.snort.org/oinkcodes
 
-## 1. Build with:
+### 1. Build with:
  
     docker build -t snortweb . --build-arg PPORK_OINKCODE=<your-oink-code-from-snort.org>
     
-## 2. Run with:
+### 2. Run with:
 
     docker run -P8080:8080 snortweb
     
 Once running, visit http://localhost:8080/
 
-## 3. Update the rules:
+### 3. Update the rules:
 
     docker exec snortweb bash update-rules.sh <oink_code>
 
-## 4. (optional) Custom intel rules (customintel.sh):
-    Rules from other sources can also be added. Either create a scipt named customintel.sh to the current directory before building, or, alternativley the script can be modified once the container has been created
-    
-    Requirements:
-	* The customintel.sh script must output rules to stdout - output is inserted into ```/etc/snort/rules/customintel.rules``` which is loaded by snort
+### 4. (optional) Custom intel rules (customintel.sh):
 
-## Rule updates: 
+Rules from other sources can also be added. Create a scipt named customintel.sh in the current directory before building, or, alternativley the script can be created/modified once the container has been created
+    
+Requirements:
+- The customintel.sh script must output rules to stdout - output is inserted into ```/etc/snort/rules/customintel.rules``` which is loaded by snort
+
+### Rule updates: 
 To update local.rules, white_list.rules or black_list.rules, modify the file and build the image.
 
-## Options
+### Options
 The following variables can be added to customise the build (values shown are the defaults):
  
 | Option                   | Build argument                                                 |
