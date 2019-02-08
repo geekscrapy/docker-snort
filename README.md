@@ -37,7 +37,7 @@ Create a scipt named customintel.sh in the current directory before building, or
 Requirements:
 - The customintel.sh script must output rules to stdout - output is inserted into ```/etc/snort/rules/customintel.rules``` which is loaded by snort
 
-### Rule updates: 
+### Additional whitelists/blacklists: 
 To update local.rules, white_list.rules or black_list.rules, modify the file and build the image.
 
 ### Options
