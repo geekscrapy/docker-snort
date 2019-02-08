@@ -22,7 +22,12 @@ Once running, visit http://localhost:8080/
 
     docker exec snortweb bash update-rules.sh <oink_code>
 
- 
+## 4. (optional) Custom intel rules (customintel.sh):
+    Rules from other sources can also be added. Either create a scipt named customintel.sh to the current directory before building, or, alternativley the script can be modified once the container has been created
+    
+    Requirements:
+	* The customintel.sh script must output rules to stdout - output is inserted into ```/etc/snort/rules/customintel.rules``` which is loaded by snort
+
 ## Rule updates: 
 To update local.rules, white_list.rules or black_list.rules, modify the file and build the image.
 
