@@ -31,7 +31,8 @@ Once running, visit http://localhost:8080/
 
 ### 4. (optional) Custom intel rules (customintel.sh):
 
-Rules from other sources can also be added. Create a scipt named customintel.sh in the current directory before building, or, alternativley the script can be created/modified once the container has been created
+This custom script enables rules to be pulled from any source when update-rules.sh is run.
+Create a scipt named customintel.sh in the current directory before building, or, alternativley the script can be created/modified once the container has been created
     
 Requirements:
 - The customintel.sh script must output rules to stdout - output is inserted into ```/etc/snort/rules/customintel.rules``` which is loaded by snort
