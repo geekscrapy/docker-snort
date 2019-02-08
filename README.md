@@ -2,6 +2,8 @@
  
 Includes Snort + PulledPork + WebSnort (exposes port 8080)
 
+*Processing of the PCAP does take a while due to the number of rules being utilised!*
+
 To use:
 
 *NB* Oink code required from: https://www.snort.org/oinkcodes

@@ -125,8 +125,6 @@ RUN touch /etc/snort/rules/iplists/white_list.rules
 ## Edits should be conducted here to limit modification to the upper layers
 
 ARG SNORT_HOME_NET="192.168.0.0/16,172.16.0.0/12,10.0.0.0/8"
-ARG PPORK_OINKCODE
-RUN if [ -z "$PPORK_OINKCODE" ]; then echo "No Oink code defined! Use: --build-arg PPORK_OINKCODE=<your-oink-code-from-snort.org> when building"; exit 1; fi
 
 ## copy pulled pork conf
 COPY pulledpork.conf /etc/snort/pulledpork.conf
@@ -156,10 +154,12 @@ RUN sed -i 's#^ipvar HOME_NET any.*#ipvar HOME_NET '"$SNORT_HOME_NET"'#' /etc/sn
 COPY local.rules /etc/snort/rules/local.rules
 COPY ip_black_list.rules /etc/snort/rules/iplists/black_list.rules
 COPY ip_white_list.rules /etc/snort/rules/iplists/white_list.rules
+RUN touch /etc/snort/rules/customintel.rules
 COPY disablesid.conf /etc/snort/disablesid.conf
 
 # Add the script that allows the rules to be updated when the container is running
-COPY update-rules.sh update-rules.sh
+COPY *.sh ./
+ARG PPORK_OINKCODE
 RUN bash update-rules.sh "$PPORK_OINKCODE"
 
 EXPOSE 8080

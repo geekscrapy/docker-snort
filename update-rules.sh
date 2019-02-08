@@ -1,8 +1,13 @@
 #!/bin/bash
 
+if [ ! -f ./customintel.sh ]; then
+	touch customintel.sh
+fi
+
+bash customintel.sh > /etc/snort/rules/customintel.rules
+
 if [ -z "$1" ]; then
-  echo "No Oink code given... Run with \"docker exec snortweb bash update-rules.sh <oinkcode>\""
-  exit 1
+  echo "No Oink code given... Not downloading rules. Run with \"docker exec snortweb bash update-rules.sh <oinkcode>\""
 fi
 
 # Add the oink code to the config file and tell PulledPork to download new rules
