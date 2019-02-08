@@ -4,6 +4,8 @@ Includes Snort + PulledPork + WebSnort (exposes port 8080)
 
 To use:
 
+* Oink code required from: https://www.snort.org/oinkcodes
+
 ## 1. Build with:
  
     docker build -t snortweb . --build-arg PPORK_OINKCODE=<your-oink-code-from-snort.org>
