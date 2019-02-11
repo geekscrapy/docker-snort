@@ -15,9 +15,10 @@ Thanks to:
 
 *NB* Oink code required if not using customintel.sh script. Can be obtained from: https://www.snort.org/oinkcodes
 
-### 1. Build with:
+### 1. Build with either (2nd option doesn't require git clone);
  
     docker build -t snortweb . --build-arg PPORK_OINKCODE=<your-oink-code-from-snort.org>
+    docker build -t snortweb . --build-arg PPORK_OINKCODE=<your-oink-code-from-snort.org> https://github.com/geekscrapy/docker-snort.git
     
 ### 2. Run with:
 
