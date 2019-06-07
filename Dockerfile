@@ -9,6 +9,8 @@ ARG PPORK_VERSION=0.7.3
 ## Snort Env
 ARG SNORT_VER=2.9.11.1
 
+## LUAJIT Env
+ARG LUAJIT_VER=2.0.5
 
 ## Install Dependencies
 RUN apt-get update && apt-get -y install \
@@ -48,8 +50,15 @@ RUN apt-get update && apt-get -y install \
     libdumbnet-dev \
     libpcap-dev \
     python-pip \
+    pkg-info \
     && apt-get clean && rm -rf /var/cache/apt/*
 
+##Install LUAJIT
+RUN cd /tmp \
+    && wget http://luajit.org/download/LuaJIT-$LUAJIT_VER.tar.gz \
+    && tar zxf LuaJIT-$LUAJIT_VER.tar.gz \
+    && cd LuaJIT-$LUAJIT_VER \
+    && make && make install
 
 ## Install DAQ
 RUN cd /tmp \

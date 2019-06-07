@@ -47,7 +47,8 @@ The following variables can be added to customise the build (values shown are th
 | Option                   | Build argument                                                 |
 |--------------------------|----------------------------------------------------------------|
 | PulledPork Oink code:    | ```PPORK_OINKCODE=<your-oink-code-from-snort.org>```           |
-| Snort version:           | ```SNORT_VER=2.9.11.1```                                       |
+| Snort version:           | ```SNORT_VER=2.9.13```                                       |
 | DAQ version:             | ```DAQ_VER=daq-2.0.6```                                        |
+| DAQ version:             | ```LUAJIT_VER=2.0.5```                                        |
 | PulledPork version:      | ```PPORK_VERSION=0.7.3```                                      |
 | Snort HOME_NET variable: | ```SNORT_HOME_NET="192.168.0.0/16,172.16.0.0/12,10.0.0.0/8"``` |
