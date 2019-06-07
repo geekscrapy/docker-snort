@@ -1,0 +1,18 @@
+version: '2'
+services:
+  snortweb:
+    build:
+      context: .
+      args:
+           - http_proxy=${http_proxy}
+           - https_proxy=${https_proxy}
+           - no_proxy=${no_proxy}
+           - PPORK_OINKCODE=your_oinkcode
+           - SNORT_VER=2.9.13
+           - DAQ_VER=daq-2.0.6
+           - LUAJIT_VER=2.0.5
+           - PPORK_VERSION=0.7.3
+    ports:
+      - 8080:8080"
+    restart: always
+
