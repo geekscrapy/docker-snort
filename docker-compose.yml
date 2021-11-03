@@ -14,8 +14,8 @@ services:
            - PPORK_VERSION=0.7.4
     environment:
       PPORK_OINKCODE: ${PPORK_OINKCODE}
-    volumes:
-     - ./snort.conf:/etc/snort/snort.conf
+    #volumes:
+    # - ./snort.conf:/etc/snort/snort.conf
     ports:
       - "${IP_BIND}:8080"
     healthcheck:
