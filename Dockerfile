@@ -137,7 +137,7 @@ ARG SNORT_HOME_NET="192.168.0.0/16,172.16.0.0/12,10.0.0.0/8"
 
 ## copy pulled pork conf
 COPY pulledpork.conf /etc/snort/pulledpork.conf
-RUN sed -i -e 's|CHANGE_CODE_HERE|'$PORK_CODE'|g' /etc/snort/pulledpork.conf
+RUN sed -i -e 's|CHANGE_CODE_HERE|'$PPORK_OINKCODE'|g' /etc/snort/pulledpork.conf
 #RUN sed -i -e 's|<'PPORK_VERSION'>|'$PPORK_VERSION'|g' /etc/snort/pulledpork.conf
 
 ## Rule management
