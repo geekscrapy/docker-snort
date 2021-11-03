@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   snortweb:
-  container_name: snortweb
+    container_name: snortweb
     build:
       context: .
       args:
