@@ -51,6 +51,7 @@ RUN apt-get update && apt-get -y install \
     libpcap-dev \
     python-pip \
     pkg-config \
+    python-jinja2 \
     && apt-get clean && rm -rf /var/cache/apt/*
 
 ##Install LUAJIT
