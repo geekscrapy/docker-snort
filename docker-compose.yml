@@ -13,7 +13,6 @@ services:
            - DAQ_VER=daq-2.0.7
            - PPORK_VERSION=0.7.4
     volumes:
-     - ./update-rules.sh:/update-rules.sh
      - ./snort.conf:/etc/snort/snort.conf
     ports:
       - "${IP_BIND}:80"
