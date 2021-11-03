@@ -50,7 +50,7 @@ RUN apt-get update && apt-get -y install \
     libdumbnet-dev \
     libpcap-dev \
     python-pip \
-    pkg-info \
+    pkg-config \
     && apt-get clean && rm -rf /var/cache/apt/*
 
 ##Install LUAJIT
