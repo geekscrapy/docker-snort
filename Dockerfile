@@ -138,7 +138,8 @@ ARG SNORT_HOME_NET="192.168.0.0/16,172.16.0.0/12,10.0.0.0/8"
 
 ## copy pulled pork conf
 COPY pulledpork.conf /etc/snort/pulledpork.conf
-RUN sed -i -e 's|CHANGE_CODE_HERE|'$PPORK_OINKCODE'|g' /etc/snort/pulledpork.conf
+ARG PPORK_OINKCODE
+RUN sed -i -r "s/CHANGE_CODE_HERE/${PPORK_OINKCODE}/g" /etc/snort/pulledpork.conf
 #RUN sed -i -e 's|<'PPORK_VERSION'>|'$PPORK_VERSION'|g' /etc/snort/pulledpork.conf
 
 ## Rule management
@@ -170,7 +171,6 @@ COPY disablesid.conf /etc/snort/disablesid.conf
 
 # Add the script that allows the rules to be updated when the container is running
 COPY *.sh ./
-ARG PPORK_OINKCODE
 RUN if [ ! -z $PPORK_OINKCODE ]; then  bash update-rules.sh "$PPORK_OINKCODE"; fi
 
 EXPOSE 8080
