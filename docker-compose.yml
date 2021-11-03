@@ -17,9 +17,9 @@ services:
     volumes:
      - ./snort.conf:/etc/snort/snort.conf
     ports:
-      - "${IP_BIND}:80"
+      - "${IP_BIND}:8080"
     healthcheck:
-      test: ["CMD-SHELL", "curl -so /dev/null http://localhost:80/ || exit 1"]
+      test: ["CMD-SHELL", "curl -so /dev/null http://localhost:8080/ || exit 1"]
       interval: 5s
       timeout: 5s
       retries: 5
