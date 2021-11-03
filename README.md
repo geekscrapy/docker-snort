@@ -1,3 +1,16 @@
+# Info
+
+Fork from https://github.com/geekscrapy/docker-snort
+
+Added docker-compose script.
+
+Use:
+```
+ln -s config.env .env
+vim .env
+docker-compose up -d
+```
+
 # docker-snort
  
 Includes Snort + PulledPork + WebSnort (exposes port 8080)
