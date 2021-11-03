@@ -14,7 +14,6 @@ services:
            - PPORK_VERSION=0.7.4
     volumes:
      - ./update-rules.sh:/update-rules.sh
-     - ${LOCAL_PATH_PORK_CONF}:/etc/snort/pulledpork.conf
      - ./snort.conf:/etc/snort/snort.conf
     ports:
       - "${IP_BIND}:80"
