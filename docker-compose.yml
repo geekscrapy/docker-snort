@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  snortweb:
+    container_name: snortweb
+    build:
+      context: .
+      args:
+           - http_proxy=${http_proxy}
+           - https_proxy=${https_proxy}
+           - no_proxy=${no_proxy}
+           - PPORK_OINKCODE=${PPORK_OINKCODE}
+           - SNORT_VER=2.9.18.1
+           - DAQ_VER=daq-2.0.7
+           - PPORK_VERSION=0.7.4
+    environment:
+      PPORK_OINKCODE: ${PPORK_OINKCODE}
+    #volumes:
+    # - ./snort.conf:/etc/snort/snort.conf
+    ports:
+      - "${IP_BIND}:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    restart: always
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://${SYSLOG_IP_SERVER}:514"
+        tag: "docker_{{.ImageName}}_{{.Name}}"
+

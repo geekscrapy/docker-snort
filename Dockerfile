@@ -1,14 +1,16 @@
 FROM ubuntu:16.04
 
 ## Env
-ARG DAQ_VER=daq-2.0.6
+ARG DAQ_VER=daq-2.0.7
 
 ## PulledPork Env
-ARG PPORK_VERSION=0.7.3
+ARG PPORK_VERSION=0.7.4
 
 ## Snort Env
-ARG SNORT_VER=2.9.11.1
+ARG SNORT_VER=2.9.18.1
 
+## LUAJIT Env
+ARG LUAJIT_VER=2.0.5
 
 ## Install Dependencies
 RUN apt-get update && apt-get -y install \
@@ -48,8 +50,16 @@ RUN apt-get update && apt-get -y install \
     libdumbnet-dev \
     libpcap-dev \
     python-pip \
+    pkg-config \
+    python-jinja2 \
     && apt-get clean && rm -rf /var/cache/apt/*
 
+##Install LUAJIT
+RUN cd /tmp \
+    && wget http://luajit.org/download/LuaJIT-$LUAJIT_VER.tar.gz \
+    && tar zxf LuaJIT-$LUAJIT_VER.tar.gz \
+    && cd LuaJIT-$LUAJIT_VER \
+    && make && make install
 
 ## Install DAQ
 RUN cd /tmp \
@@ -128,7 +138,9 @@ ARG SNORT_HOME_NET="192.168.0.0/16,172.16.0.0/12,10.0.0.0/8"
 
 ## copy pulled pork conf
 COPY pulledpork.conf /etc/snort/pulledpork.conf
-RUN sed -i -e 's|<'PPORK_VERSION'>|'$PPORK_VERSION'|g' /etc/snort/pulledpork.conf
+ARG PPORK_OINKCODE
+RUN sed -i -r "s/CHANGE_CODE_HERE/${PPORK_OINKCODE}/g" /etc/snort/pulledpork.conf
+#RUN sed -i -e 's|<'PPORK_VERSION'>|'$PPORK_VERSION'|g' /etc/snort/pulledpork.conf
 
 ## Rule management
 ## Enable all rules!!
@@ -159,8 +171,7 @@ COPY disablesid.conf /etc/snort/disablesid.conf
 
 # Add the script that allows the rules to be updated when the container is running
 COPY *.sh ./
-ARG PPORK_OINKCODE
-RUN if [ ! -z $PPORK_OINKCODE ]; then  bash update-rules.sh "$PPORK_OINKCODE"; fi
+#RUN if [ ! -z $PPORK_OINKCODE ]; then  bash update-rules.sh "$PPORK_OINKCODE"; fi
 
 EXPOSE 8080
 CMD ["websnort"]
